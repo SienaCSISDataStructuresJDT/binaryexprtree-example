@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
    A simple binary expression tree implementation.
    <BR> 
@@ -94,6 +97,73 @@ public class BinaryExprTree {
 	}
 	return value.toString();
     }
+
+    /**
+       "Visit" (for the purposes of the example, just print) the nodes
+       of this tree in preorder traversal.
+    */
+    public void preOrder() {
+
+	// visit root of this subtree
+	System.out.print(value + " ");
+	// go left
+	if (left != null) left.preOrder();
+	// go right
+	if (right != null) right.preOrder();
+    }
+    
+
+    /**
+       "Visit" (for the purposes of the example, just print) the nodes
+       of this tree in inorder traversal.
+    */
+    public void inOrder() {
+
+	// go left
+	if (left != null) left.inOrder();
+	// visit root of this subtree
+	System.out.print(value + " ");
+	// go right
+	if (right != null) right.inOrder();
+    }
+  
+    /**
+       "Visit" (for the purposes of the example, just print) the nodes
+       of this tree in postorder traversal.
+    */
+    public void postOrder() {
+
+	// go left
+	if (left != null) left.postOrder();
+	// go right
+	if (right != null) right.postOrder();
+	// visit root of this subtree
+	System.out.print(value + " ");
+    }
+    
+    /**
+       "Visit" (for the purposes of the example, just print) the nodes
+       of this tree in level order traversal.
+    */
+    public void levelOrder() {
+
+	// this one's not recursive! but instead, it's an application
+	// of a queue!
+	Queue<BinaryExprTree> q = new LinkedList<BinaryExprTree>();
+
+	// enqueue the root (of this subtree, which is "this")
+	q.add(this);
+
+	// as long as there are more elements in the queue, we
+	// visit the one we remove, then enqueue its children
+	while (!q.isEmpty()) {
+
+	    BinaryExprTree node = q.remove();
+	    System.out.print(node.value + " ");
+	    if (node.left != null) q.add(node.left);
+	    if (node.right != null) q.add(node.right);
+	}
+    }
     
     /** main method to set up an answer */
     public static void main(String[] args) {
@@ -117,5 +187,25 @@ public class BinaryExprTree {
 
         /* what's the answer */
         System.out.println(divide.evaluate());
+
+	/* print in order */
+	System.out.println("In order:");
+	divide.inOrder();
+	System.out.println();
+
+	/* print preorder */
+	System.out.println("Preorder:");
+	divide.preOrder();
+	System.out.println();
+
+	/* print postorder */
+	System.out.println("Postorder:");
+	divide.postOrder();
+	System.out.println();
+
+	/* print level order */
+	System.out.println("Level order:");
+	divide.levelOrder();
+	System.out.println();
     }
 }
