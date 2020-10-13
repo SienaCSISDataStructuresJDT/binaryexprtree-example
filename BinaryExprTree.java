@@ -5,6 +5,7 @@
    (restricted to "+", "-", "*", "/") or can be treated as an integer value.
    
    @author Jim Teresco
+   @version Fall 2019
 */
 public class BinaryExprTree {
 
@@ -14,6 +15,15 @@ public class BinaryExprTree {
     public static final String TIMES = "*";
     public static final String DIVIDE = "/";
 
+    /** the value at the root of this tree, which will always
+	be either a String (internal nodes representing operators),
+	or an Integer (leaf nodes representing numbers) */
+    private Object value;
+    /** left child */
+    private BinaryExprTree left;
+    /** right child */
+    private BinaryExprTree right;
+
     /**
        construct a new BinaryExprTree object for a leaf node, which
        must contain a number
@@ -22,6 +32,7 @@ public class BinaryExprTree {
     */
     public BinaryExprTree(int value) {
 
+	this.value = new Integer(value);
     }
     
     /**
@@ -35,6 +46,11 @@ public class BinaryExprTree {
     */
     public BinaryExprTree(String op, BinaryExprTree left, BinaryExprTree right) {
 
+	// To do: add error checking to make sure op is a valid operator
+	// and that both left and right are not null
+	this.value = op;
+	this.left = left;
+	this.right = right;
     }
     
     /**
@@ -43,8 +59,7 @@ public class BinaryExprTree {
        @return true if the value is a valid operator, false otherwise
      */
     public boolean isOperator() {
-
-	return false;
+	return value instanceof String;
     }
 
     /**
@@ -54,7 +69,16 @@ public class BinaryExprTree {
      */
     public int evaluate() {
 
-	return 0;
+        if (isOperator()) {
+            int leftVal = left.evaluate();
+            int rightVal = right.evaluate();
+            if (value.equals(PLUS)) return leftVal+rightVal;
+            if (value.equals(MINUS)) return leftVal-rightVal;
+            if (value.equals(TIMES)) return leftVal*rightVal;
+            if (value.equals(DIVIDE)) return leftVal/rightVal;
+        }
+
+	return (Integer)value;
     }
 
     /**
@@ -65,7 +89,10 @@ public class BinaryExprTree {
     */
     public String toString() {
 
-	return "";
+	if (isOperator()) {
+	    return "(" + left + " " + value + " " + right + ")";
+	}
+	return value.toString();
     }
     
     /** main method to set up an answer */
